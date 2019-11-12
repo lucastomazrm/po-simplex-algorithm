@@ -1,9 +1,17 @@
+// // Teste 1
 var variaveis = ["x1", "x2", "Rs"];
-var restricoes = [[2, 4], [5, 8], [1, 0]];
+var restricoes = [
+  [2, 4],
+  [5, 8],
+  [1, 0]
+];
 var limites = [250, 460, 44];
 var funcaoObjetiva = [-14, -22];
 
-var qtdVariaveis = variaveis.length - 1;
+// Maximizacao = Variavel de Excesso
+// Minimizacao = Variavel de Folga
+
+var qtdVariaveis = variaveis.length;
 var qtdRestricoes = restricoes.length;
 var colunas = qtdVariaveis + qtdRestricoes;
 
@@ -11,7 +19,7 @@ var colunaPivo = 0;
 var linhaPivo = 0;
 
 function criaModeloTabular() {
-  // Acrescenta as variáveis de excesso
+  // Acrescenta as variáveis de excesso/folga
   var indiceVariavelAuxiliar = qtdVariaveis;
   for (var linha = 0; linha < qtdRestricoes; linha++) {
     indiceVariavelAuxiliar += linha;
@@ -24,6 +32,8 @@ function criaModeloTabular() {
     }
     restricoes[linha].push(limites[linha]);
   }
+
+  // Insere variavel de excesso/folga na ultima restrição
   restricoes[qtdRestricoes - 1][colunas - 1] = 1;
 
   // Insere os 0 na linha da função objetiva
@@ -39,6 +49,7 @@ function criaModeloTabular() {
 
 function selecionarPivo() {
   var menor = 0;
+
   // Seleciona a coluna do pivô (menor valor negativo)
   funcaoObjetiva.forEach((valor, index) => {
     if (valor < menor) {
@@ -53,7 +64,6 @@ function selecionarPivo() {
     if (index != restricoes.length - 1) {
       // Divide a coluna da restrição pelo valor na mesma linha da coluna do pivô
       var resultadoDivisao = limites[index] / linha[colunaPivo];
-
       // Seleciona o menor valor positivo resultante da divisão
       if (resultadoDivisao < menor && resultadoDivisao > 0) {
         menor = resultadoDivisao;
@@ -74,7 +84,7 @@ function aplicarGauss() {
   var valorPivot = restricoes[linhaPivo][colunaPivo];
 
   if (valorPivot != 1) {
-    // Se o pivor for diferente de 1, divide toda a linha pelo valor dele
+    // Se o pivô for diferente de 1, divide toda a linha pelo valor dele
     restricoes[linhaPivo] = restricoes[linhaPivo].map(coluna => {
       return coluna / valorPivot;
     });
@@ -93,12 +103,14 @@ function aplicarGauss() {
   }
 }
 
-criaModeloTabular();
-selecionarPivo();
-aplicarGauss();
-atualizaVariaveis();
+function rodar() {
+  criaModeloTabular();
 
-selecionarPivo();
-aplicarGauss();
-
-console.log(restricoes);
+  // Condição de Parada: Todos valores da linha funcaoObjetivo positivo
+  while (funcaoObjetiva.some(valor => valor < 0)) {
+    selecionarPivo();
+    aplicarGauss();
+    atualizaVariaveis();
+    console.log([...restricoes]);
+  }
+}
