@@ -59,7 +59,7 @@ function App() {
                 {variaveis.map((y, indexVariavel) => (
                   <td key={indexVariavel}>
                     <input
-                      type="text"
+                      type="number"
                       value={restricoes[indexRestricao][indexVariavel].toString()}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         restricoes[indexRestricao][indexVariavel] = parseFloat(event.target.value);
@@ -72,7 +72,7 @@ function App() {
                 <td className="simplex-indicador">{objetivo === "maximizacao" ? "<=" : ">="}</td>
                 <td>
                   <input
-                    type="text"
+                    type="number"
                     value={limites[indexRestricao].toString()}
                     onChange={event => {
                       limites[indexRestricao] = parseFloat(event.target.value);
@@ -119,7 +119,7 @@ function App() {
               {variaveis.map((value, index) => (
                 <td key={index}>
                   <input
-                    type="text"
+                    type="number"
                     value={funcaoObjetiva[index].toString()}
                     onChange={event => {
                       funcaoObjetiva[index] = parseFloat(event.target.value);

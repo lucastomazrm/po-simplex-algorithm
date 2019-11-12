@@ -33,7 +33,7 @@ function criaModeloTabular() {
     restricoes[linha].push(limites[linha]);
   }
 
-  // Insere variavel de excesso/folga na ultima restrição
+  // Insere variavel de excesso/folga na ultima coluna da restrição
   restricoes[qtdRestricoes - 1][colunas - 1] = 1;
 
   // Insere os 0 na linha da função objetiva
@@ -94,7 +94,7 @@ function aplicarGauss() {
   for (var i = 0; i < qtdRestricoes; i++) {
     // Não operar com a linha do Pivô que já foi modificada no passo anterior
     if (i != linhaPivo) {
-      // Linha = Linha - valorConveniente * linhaPivot
+      // Linha = Linha - valorConveniente * linhaPivo
       var valorConveniente = restricoes[i][colunaPivo];
       restricoes[i] = restricoes[i].map((valorColuna, index) => {
         return valorColuna - valorConveniente * restricoes[linhaPivo][index];
