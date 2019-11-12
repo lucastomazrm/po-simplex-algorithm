@@ -1,12 +1,12 @@
 // // Teste 1
-var variaveis = ["x1", "x2", "Rs"];
-var restricoes = [
-  [2, 4],
-  [5, 8],
-  [1, 0]
-];
-var limites = [250, 460, 44];
-var funcaoObjetiva = [-14, -22];
+// var variaveis = ["x1", "x2", "Rs"];
+// var restricoes = [
+//   [2, 4],
+//   [5, 8],
+//   [1, 0]
+// ];
+// var limites = [250, 460, 44];
+// var funcaoObjetiva = [-14, -22];
 
 // Maximizacao = Variavel de Excesso
 // Minimizacao = Variavel de Folga

@@ -6,9 +6,9 @@ function App() {
   const [restricoes, setRestricoes] = useState<Number[][]>([]);
   const [limites, setLimites] = useState<Number[]>([]);
   const [objetivo, setObjetivo] = useState("maximizacao");
-  var funcaoObjetiva = [-30, -50];
+  const [funcaoObjetiva, setFuncaoObjetiva] = useState<Number[]>([]);
 
-  console.log(restricoes, limites);
+  console.log(restricoes, limites, funcaoObjetiva);
   return (
     <div className="container">
       <h2>Calculadora Simplex</h2>
@@ -38,6 +38,7 @@ function App() {
                 <button
                   onClick={() => {
                     setVariaveis([...variaveis, "x"]);
+                    setFuncaoObjetiva([...funcaoObjetiva, 0])
                     if (restricoes.length > 0) {
                       restricoes.forEach((r, i) => {
                         restricoes[i].push(0);
@@ -58,12 +59,10 @@ function App() {
                 {variaveis.map((y, indexVariavel) => (
                   <td key={indexVariavel}>
                     <input
-                      type="number"
+                      type="text"
                       value={restricoes[indexRestricao][indexVariavel].toString()}
-                      onChange={(event: any) => {
-                        restricoes[indexRestricao][indexVariavel] = parseFloat(
-                          event.target.value
-                        );
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        restricoes[indexRestricao][indexVariavel] = parseFloat(event.target.value);
                         setRestricoes([...restricoes]);
                       }}
                     />
@@ -73,7 +72,7 @@ function App() {
                 <td className="simplex-indicador">{objetivo === "maximizacao" ? "<=" : ">="}</td>
                 <td>
                   <input
-                    type="number"
+                    type="text"
                     value={limites[indexRestricao].toString()}
                     onChange={event => {
                       limites[indexRestricao] = parseFloat(event.target.value);
@@ -103,6 +102,34 @@ function App() {
               </td>
             </tr>
           </tfoot>
+        </table>
+        <h5>Função Objetiva</h5>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              {variaveis.map((value, index) => (
+                <th key={index}>{`x${index + 1}`}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Max Z</td>
+              {variaveis.map((value, index) => (
+                <td key={index}>
+                  <input
+                    type="text"
+                    value={funcaoObjetiva[index].toString()}
+                    onChange={event => {
+                      funcaoObjetiva[index] = parseFloat(event.target.value);
+                      setFuncaoObjetiva([...funcaoObjetiva]);
+                    }}
+                  />
+                </td>
+              ))}
+            </tr>
+          </tbody>
         </table>
         <br />
         <button
