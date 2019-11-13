@@ -1,30 +1,36 @@
 // // Teste 1
-// var variaveis = ["x1", "x2", "Rs"];
-// var restricoes = [
+
+// let variaveis = ["x1", "x2", "Rs"];
+// let restricoes = [
 //   [2, 4],
 //   [5, 8],
 //   [1, 0]
 // ];
-// var limites = [250, 460, 44];
-// var funcaoObjetiva = [-14, -22];
+// let limites = [250, 460, 44];
+// let funcaoObjetiva = [-14, -22];
+
+let variaveis;
+let restricoes;
+let limites;
+let funcaoObjetiva;
+
+let qtdVariaveis;
+let qtdRestricoes;
+let colunas;
 
 // Maximizacao = Variavel de Excesso
 // Minimizacao = Variavel de Folga
 
-var qtdVariaveis = variaveis.length;
-var qtdRestricoes = restricoes.length;
-var colunas = qtdVariaveis + qtdRestricoes;
-
-var colunaPivo = 0;
-var linhaPivo = 0;
+let colunaPivo = 0;
+let linhaPivo = 0;
 
 function criaModeloTabular() {
   // Acrescenta as variáveis de excesso/folga
-  var indiceVariavelAuxiliar = qtdVariaveis;
-  for (var linha = 0; linha < qtdRestricoes; linha++) {
+  let indiceVariavelAuxiliar = qtdVariaveis;
+  for (let linha = 0; linha < qtdRestricoes; linha++) {
     indiceVariavelAuxiliar += linha;
-    for (var coluna = qtdVariaveis; coluna < colunas; coluna++) {
-      if (coluna == indiceVariavelAuxiliar) {
+    for (let coluna = qtdVariaveis; coluna < colunas; coluna++) {
+      if (coluna === indiceVariavelAuxiliar) {
         restricoes[linha][coluna] = 1;
       } else {
         restricoes[linha][coluna] = 0;
@@ -37,7 +43,7 @@ function criaModeloTabular() {
   restricoes[qtdRestricoes - 1][colunas - 1] = 1;
 
   // Insere os 0 na linha da função objetiva
-  for (var i = 0; i <= qtdRestricoes; i++) funcaoObjetiva.push(0);
+  for (let i = 0; i <= qtdRestricoes; i++) funcaoObjetiva.push(0);
 
   // Acopla a função objetiva ao modelo tabular
   restricoes.push(funcaoObjetiva);
@@ -48,7 +54,7 @@ function criaModeloTabular() {
 }
 
 function selecionarPivo() {
-  var menor = 0;
+  let menor = 0;
 
   // Seleciona a coluna do pivô (menor valor negativo)
   funcaoObjetiva.forEach((valor, index) => {
@@ -61,9 +67,9 @@ function selecionarPivo() {
   menor = Number.MAX_VALUE;
   restricoes.forEach((linha, index) => {
     // Não calcular com a linha da função objetiva
-    if (index != restricoes.length - 1) {
+    if (index !== restricoes.length - 1) {
       // Divide a coluna da restrição pelo valor na mesma linha da coluna do pivô
-      var resultadoDivisao = limites[index] / linha[colunaPivo];
+      let resultadoDivisao = limites[index] / linha[colunaPivo];
       // Seleciona o menor valor positivo resultante da divisão
       if (resultadoDivisao < menor && resultadoDivisao > 0) {
         menor = resultadoDivisao;
@@ -81,9 +87,9 @@ function atualizaVariaveis() {
 }
 
 function aplicarGauss() {
-  var valorPivot = restricoes[linhaPivo][colunaPivo];
+  let valorPivot = restricoes[linhaPivo][colunaPivo];
 
-  if (valorPivot != 1) {
+  if (valorPivot !== 1) {
     // Se o pivô for diferente de 1, divide toda a linha pelo valor dele
     restricoes[linhaPivo] = restricoes[linhaPivo].map(coluna => {
       return coluna / valorPivot;
@@ -91,11 +97,11 @@ function aplicarGauss() {
   }
 
   // Aplica gauss para as demais linhas
-  for (var i = 0; i < qtdRestricoes; i++) {
+  for (let i = 0; i < qtdRestricoes; i++) {
     // Não operar com a linha do Pivô que já foi modificada no passo anterior
-    if (i != linhaPivo) {
+    if (i !== linhaPivo) {
       // Linha = Linha - valorConveniente * linhaPivo
-      var valorConveniente = restricoes[i][colunaPivo];
+      const valorConveniente = restricoes[i][colunaPivo];
       restricoes[i] = restricoes[i].map((valorColuna, index) => {
         return valorColuna - valorConveniente * restricoes[linhaPivo][index];
       });
@@ -103,14 +109,29 @@ function aplicarGauss() {
   }
 }
 
-function rodar() {
+export function rodar(v, r, l, f) {
+  variaveis = v;
+  restricoes = r;
+  limites = l;
+  funcaoObjetiva = f.map(x => x * -1);
+
+  qtdVariaveis = variaveis.length;
+  qtdRestricoes = restricoes.length;
+  colunas = qtdVariaveis + qtdRestricoes;
+
   criaModeloTabular();
 
-  // Condição de Parada: Todos valores da linha funcaoObjetivo positivo
-  while (funcaoObjetiva.some(valor => valor < 0)) {
-    selecionarPivo();
-    aplicarGauss();
-    atualizaVariaveis();
-    console.log([...restricoes]);
-  }
+  let steps = [];
+
+  return new Promise((resolve, reject) => {
+    // Condição de Parada: Todos valores da linha funcaoObjetivo positivo
+    while (funcaoObjetiva.some(valor => valor < 0)) {
+      selecionarPivo();
+      aplicarGauss();
+      atualizaVariaveis();
+      steps.push([...restricoes]);
+    }
+    console.log(steps);
+    resolve(steps);
+  });
 }
