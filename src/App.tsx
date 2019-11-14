@@ -8,10 +8,10 @@ function App() {
   const [variaveis, setVariaveis] = useState<any[]>(["x1", "x2"]);
 
   // Padrão
-  // const [restricoes, setRestricoes] = useState<any[][]>([]);
-  // const [limites, setLimites] = useState<any[]>([]);
-  // const [objetivo, setObjetivo] = useState("minimizacao");
-  // const [funcaoObjetiva, setFuncaoObjetiva] = useState<Number[]>([0, 0]);
+  const [restricoes, setRestricoes] = useState<any[][]>([]);
+  const [limites, setLimites] = useState<any[]>([]);
+  const [objetivo, setObjetivo] = useState("minimizacao");
+  const [funcaoObjetiva, setFuncaoObjetiva] = useState<Number[]>([0, 0]);
 
   // Q1 Min
   // const [restricoes, setRestricoes] = useState<any[][]>([[5, 3], [2, 7]]);
@@ -38,10 +38,10 @@ function App() {
   // const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([14, 22]);
 
   // Q2 Max
-  const [restricoes, setRestricoes] = useState<any[][]>([[2, 1], [1, 2], [1, 3]]);
-  const [limites, setLimites] = useState<any[]>([16, 11, 15]);
-  const [objetivo, setObjetivo] = useState("maximizacao");
-  const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([30, 50]);
+  // const [restricoes, setRestricoes] = useState<any[][]>([[2, 1], [1, 2], [1, 3]]);
+  // const [limites, setLimites] = useState<any[]>([16, 11, 15]);
+  // const [objetivo, setObjetivo] = useState("maximizacao");
+  // const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([30, 50]);
 
   const [resultado, setResultado] = useState<any[]>([[]]);
 
