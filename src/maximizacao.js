@@ -126,7 +126,6 @@ export function rodar(v, r, l, f) {
       aplicarGauss();
       atualizaVariaveis();
       steps.push([...restricoes]);
-      console.log(trocas);
     }
     resolve([steps, trocas]);
   });

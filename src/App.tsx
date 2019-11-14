@@ -6,10 +6,42 @@ import { rodar as rodarMinimizacao } from "./minimizacao";
 function App() {
 
   const [variaveis, setVariaveis] = useState<any[]>(["x1", "x2"]);
-  const [restricoes, setRestricoes] = useState<any[][]>([[10, 2], [8, 4], [4, 10]]);
-  const [limites, setLimites] = useState<any[]>([20, 32, 40]);
-  const [objetivo, setObjetivo] = useState("minimizacao");
-  const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([5, 4]);
+
+  // Padrão
+  // const [restricoes, setRestricoes] = useState<any[][]>([]);
+  // const [limites, setLimites] = useState<any[]>([]);
+  // const [objetivo, setObjetivo] = useState("minimizacao");
+  // const [funcaoObjetiva, setFuncaoObjetiva] = useState<Number[]>([0, 0]);
+
+  // Q1 Min
+  // const [restricoes, setRestricoes] = useState<any[][]>([[5, 3], [2, 7]]);
+  // const [limites, setLimites] = useState<any[]>([14, 11]);
+  // const [objetivo, setObjetivo] = useState("minimizacao");
+  // const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([3, 4]);
+
+  // Q2 Min
+  // const [restricoes, setRestricoes] = useState<any[][]>([[8, 9], [9, 5]]);
+  // const [limites, setLimites] = useState<any[]>([70, 47]);
+  // const [objetivo, setObjetivo] = useState("minimizacao");
+  // const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([7, 6]);
+
+  // Q3 Min
+  // const [restricoes, setRestricoes] = useState<any[][]>([[10, 2], [8, 4], [4, 10]]);
+  // const [limites, setLimites] = useState<any[]>([20, 32, 40]);
+  // const [objetivo, setObjetivo] = useState("minimizacao");
+  // const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([5, 4]);
+
+  // Q1 Max
+  // const [restricoes, setRestricoes] = useState<any[][]>([[2, 4], [5, 8], [1, 0]]);
+  // const [limites, setLimites] = useState<any[]>([250, 460, 44]);
+  // const [objetivo, setObjetivo] = useState("maximizacao");
+  // const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([14, 22]);
+
+  // Q2 Max
+  const [restricoes, setRestricoes] = useState<any[][]>([[2, 1], [1, 2], [1, 3]]);
+  const [limites, setLimites] = useState<any[]>([16, 11, 15]);
+  const [objetivo, setObjetivo] = useState("maximizacao");
+  const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([30, 50]);
 
   const [resultado, setResultado] = useState<any[]>([[]]);
 

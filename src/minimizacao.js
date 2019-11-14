@@ -72,7 +72,7 @@ function selecionarPivo() {
 
 function atualizaVariaveis() {
   funcaoObjetiva = restricoes[restricoes.length - 1];
-  limites = restricoes.map(linha => {
+  limites = restricoes.slice(0, restricoes.length - 1).map(linha => {
     return linha[colunas - 1];
   });
 }
@@ -121,12 +121,11 @@ export function rodar(v, r, l, f) {
     steps.push([...restricoes]);
 
     // Condição de Parada: Todos valores da coluna Rs positivo
-    while (limites.slice(0, limites.length - 1).some(valor => valor < 0)) {
+    while (limites.some(valor => valor < 0)) {
       selecionarPivo();
       aplicarGauss();
       atualizaVariaveis();
       steps.push([...restricoes]);
-      console.log(trocas);
     }
     resolve([steps, trocas]);
   });
