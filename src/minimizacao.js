@@ -18,6 +18,8 @@ let qtdVariaveis;
 let qtdRestricoes;
 let colunas;
 
+let trocas;
+
 // Maximizacao = Variavel de Excesso
 // Minimizacao = Variavel de Folga
 
@@ -88,7 +90,8 @@ function atualizaVariaveis() {
 
 function aplicarGauss() {
   let valorPivot = restricoes[linhaPivo][colunaPivo];
-
+  trocas.push([...trocas[trocas.length - 1]]);
+  trocas[trocas.length - 1][linhaPivo] = `x${colunaPivo + 1}`;
   if (valorPivot !== 1) {
     // Se o pivô for diferente de 1, divide toda a linha pelo valor dele
     restricoes[linhaPivo] = restricoes[linhaPivo].map(coluna => {
@@ -114,6 +117,7 @@ export function rodar(v, r, l, f) {
   restricoes = r;
   limites = l;
   funcaoObjetiva = f.map(x => x * -1);
+  trocas = [[...restricoes.map((v, i) => `x${i + variaveis.length + 1}`)]];
 
   qtdVariaveis = variaveis.length;
   qtdRestricoes = restricoes.length;
@@ -124,6 +128,8 @@ export function rodar(v, r, l, f) {
   let steps = [];
 
   return new Promise((resolve, reject) => {
+    steps.push([...restricoes]);
+
     // Condição de Parada: Todos valores da linha funcaoObjetivo positivo
     while (funcaoObjetiva.some(valor => valor < 0)) {
       selecionarPivo();
@@ -131,6 +137,6 @@ export function rodar(v, r, l, f) {
       atualizaVariaveis();
       steps.push([...restricoes]);
     }
-    resolve(steps);
+    resolve([steps, trocas]);
   });
 }

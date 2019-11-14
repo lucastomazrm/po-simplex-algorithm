@@ -42,7 +42,7 @@ function App() {
                 <th>
                   <button
                     onClick={() => {
-                      setVariaveis([...variaveis, `x${variaveis.length}`]);
+                      setVariaveis([...variaveis, `x${variaveis.length + 1}`]);
                       setFuncaoObjetiva([...funcaoObjetiva, 0])
                       if (restricoes.length > 0) {
                         restricoes.forEach((r: any, i: any) => {
