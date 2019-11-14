@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { rodar } from "./script";
+import { rodar as rodarMaximizacao } from "./maximizacao";
+import { rodar as rodarMinimizacao } from "./minimizacao";
 
 function App() {
 
   const [variaveis, setVariaveis] = useState<any[]>(["x1", "x2"]);
-  const [restricoes, setRestricoes] = useState<any[][]>([[2, 4], [5, 8], [1, 0]]);
-  const [limites, setLimites] = useState<any[]>([250, 460, 44]);
+  const [restricoes, setRestricoes] = useState<any[][]>([[2, 1], [1, 2], [1, 3]]);
+  const [limites, setLimites] = useState<any[]>([16, 11, 15]);
   const [objetivo, setObjetivo] = useState("maximizacao");
-  const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([14, 22]);
+  const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([30, 50]);
 
-  const [steps, setSteps] = useState([]);
+  const [resultado, setResultado] = useState([[]]);
 
-  if (steps.length === 0) {
+  if (resultado[0].length === 0) {
     return (
       <div className="container">
         <h2>Calculadora Simplex</h2>
@@ -33,15 +34,15 @@ function App() {
             <thead>
               <tr>
                 <th>Base</th>
-                {variaveis.map((value: any, indexVariavel: any) => (
-                  <th key={indexVariavel}>{`x${indexVariavel + 1}`}</th>
+                {variaveis.map((value: any) => (
+                  <th key={value}>{value}</th>
                 ))}
                 <th></th>
                 <th>Limite</th>
                 <th>
                   <button
                     onClick={() => {
-                      setVariaveis([...variaveis, "x"]);
+                      setVariaveis([...variaveis, `x${variaveis.length}`]);
                       setFuncaoObjetiva([...funcaoObjetiva, 0])
                       if (restricoes.length > 0) {
                         restricoes.forEach((r: any, i: any) => {
@@ -137,8 +138,8 @@ function App() {
           </table>
           <br />
           <button
-            onClick={() => rodar(variaveis, restricoes, limites, funcaoObjetiva).then((steps) => {
-              setSteps(steps);
+            onClick={() => rodarMaximizacao(variaveis, restricoes, limites, funcaoObjetiva).then((resultado) => {
+              setResultado(resultado);
             })}
           >
             Executar Algoritmo
@@ -150,7 +151,46 @@ function App() {
   return (
     <div className="container">
       <h2>Calculadora Simplex</h2>
-
+      {resultado[0].map((step: any, interacao: number) => (
+        <div key={step}>
+          <h3>Passo {interacao + 1}</h3>
+          <table >
+            <thead>
+              <tr>
+                <th>
+                  Base
+              </th>
+                {step[0].slice(0, step[0].length - 1).map((column: any, index: any) => {
+                  return (
+                    <th key={index}>{`x${index + 1}`}</th>
+                  )
+                })}
+                <th>Limite</th>
+              </tr>
+            </thead>
+            <tbody>
+              {step.slice(0, step.length - 1).map((row: any, index: any) => {
+                return (
+                  <tr key={index}>
+                    <td key={index}>{resultado[1][interacao][index]}</td>
+                    {row.map((column: any, index: any) => (
+                      <td key={index}>{column}</td>
+                    ))}
+                  </tr>
+                )
+              })}
+              <tr>
+                <td>Fo</td>
+                {step[step.length - 1].map((value: any, index: any) => (
+                  <td key={index}>
+                    {value}
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ))}
     </div>
   );
 }
