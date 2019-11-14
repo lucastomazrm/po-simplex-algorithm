@@ -1,14 +1,3 @@
-// Teste 1
-
-// let variaveis = ["x1", "x2"];
-// let restricoes = [
-//   [2, 4],
-//   [5, 8],
-//   [1, 0]
-// ];
-// let limites = [250, 460, 44];
-// let funcaoObjetiva = [-14, -22];
-
 let variaveis;
 let restricoes;
 let limites;
@@ -58,7 +47,7 @@ function criaModeloTabular() {
 function selecionarPivo() {
   let menor = 0;
 
-  // Seleciona a coluna do pivô (menor valor negativo)
+  // Seleciona a coluna do pivô (menor valor negativo na linha da Funcao Objetiva)
   funcaoObjetiva.forEach((valor, index) => {
     if (valor < menor) {
       menor = valor;
@@ -92,6 +81,7 @@ function aplicarGauss() {
   let valorPivot = restricoes[linhaPivo][colunaPivo];
   trocas.push([...trocas[trocas.length - 1]]);
   trocas[trocas.length - 1][linhaPivo] = `x${colunaPivo + 1}`;
+
   if (valorPivot !== 1) {
     // Se o pivô for diferente de 1, divide toda a linha pelo valor dele
     restricoes[linhaPivo] = restricoes[linhaPivo].map(coluna => {
@@ -136,6 +126,7 @@ export function rodar(v, r, l, f) {
       aplicarGauss();
       atualizaVariaveis();
       steps.push([...restricoes]);
+      console.log(trocas);
     }
     resolve([steps, trocas]);
   });

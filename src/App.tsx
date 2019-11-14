@@ -6,12 +6,12 @@ import { rodar as rodarMinimizacao } from "./minimizacao";
 function App() {
 
   const [variaveis, setVariaveis] = useState<any[]>(["x1", "x2"]);
-  const [restricoes, setRestricoes] = useState<any[][]>([[2, 1], [1, 2], [1, 3]]);
-  const [limites, setLimites] = useState<any[]>([16, 11, 15]);
-  const [objetivo, setObjetivo] = useState("maximizacao");
-  const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([30, 50]);
+  const [restricoes, setRestricoes] = useState<any[][]>([[10, 2], [8, 4], [4, 10]]);
+  const [limites, setLimites] = useState<any[]>([20, 32, 40]);
+  const [objetivo, setObjetivo] = useState("minimizacao");
+  const [funcaoObjetiva, setFuncaoObjetiva] = useState<any[]>([5, 4]);
 
-  const [resultado, setResultado] = useState([[]]);
+  const [resultado, setResultado] = useState<any[]>([[]]);
 
   if (resultado[0].length === 0) {
     return (
@@ -138,9 +138,17 @@ function App() {
           </table>
           <br />
           <button
-            onClick={() => rodarMaximizacao(variaveis, restricoes, limites, funcaoObjetiva).then((resultado) => {
-              setResultado(resultado);
-            })}
+            onClick={() => {
+              if (objetivo === "maximizacao") {
+                rodarMaximizacao(variaveis, restricoes, limites, funcaoObjetiva).then((resultado) => {
+                  setResultado(resultado);
+                })
+              } else {
+                rodarMinimizacao(variaveis, restricoes, limites, funcaoObjetiva).then((resultado) => {
+                  setResultado(resultado);
+                })
+              }
+            }}
           >
             Executar Algoritmo
         </button>
@@ -171,7 +179,7 @@ function App() {
             <tbody>
               {step.slice(0, step.length - 1).map((row: any, index: any) => {
                 return (
-                  <tr key={index}>
+                  <tr key={index} >
                     <td key={index}>{resultado[1][interacao][index]}</td>
                     {row.map((column: any, index: any) => (
                       <td key={index}>{column}</td>

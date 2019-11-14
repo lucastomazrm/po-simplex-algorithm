@@ -1,14 +1,3 @@
-// Teste 1
-
-// let variaveis = ["x1", "x2"];
-// let restricoes = [
-//   [2, 4],
-//   [5, 8],
-//   [1, 0]
-// ];
-// let limites = [250, 460, 44];
-// let funcaoObjetiva = [-14, -22];
-
 let variaveis;
 let restricoes;
 let limites;
@@ -58,24 +47,24 @@ function criaModeloTabular() {
 function selecionarPivo() {
   let menor = 0;
 
-  // Seleciona a coluna do pivô (menor valor negativo)
-  funcaoObjetiva.forEach((valor, index) => {
+  // Seleciona a linha do pivô (menor valor negativo na coluna da Restricao (limite))
+  limites.forEach((valor, index) => {
     if (valor < menor) {
       menor = valor;
-      colunaPivo = index;
+      linhaPivo = index;
     }
   });
 
   menor = Number.MAX_VALUE;
-  restricoes.forEach((linha, index) => {
-    // Não calcular com a linha da função objetiva
-    if (index !== restricoes.length - 1) {
-      // Divide a coluna da restrição pelo valor na mesma linha da coluna do pivô
-      let resultadoDivisao = limites[index] / linha[colunaPivo];
+  restricoes[linhaPivo].forEach((restricao, index) => {
+    // Não calcula com a coluna da Restricao (limite)
+    if (index !== restricoes[linhaPivo].length - 1) {
+      // Divide o elemento da linha FuncaoObjetiva pelo elemento na mesma coluna mas na linha do Pivô
+      let resultadoDivisao = Math.abs(funcaoObjetiva[index] / restricao);
       // Seleciona o menor valor positivo resultante da divisão
       if (resultadoDivisao < menor && resultadoDivisao > 0) {
         menor = resultadoDivisao;
-        linhaPivo = index;
+        colunaPivo = index;
       }
     }
   });
@@ -92,6 +81,7 @@ function aplicarGauss() {
   let valorPivot = restricoes[linhaPivo][colunaPivo];
   trocas.push([...trocas[trocas.length - 1]]);
   trocas[trocas.length - 1][linhaPivo] = `x${colunaPivo + 1}`;
+
   if (valorPivot !== 1) {
     // Se o pivô for diferente de 1, divide toda a linha pelo valor dele
     restricoes[linhaPivo] = restricoes[linhaPivo].map(coluna => {
@@ -114,9 +104,9 @@ function aplicarGauss() {
 
 export function rodar(v, r, l, f) {
   variaveis = v;
-  restricoes = r;
-  limites = l;
-  funcaoObjetiva = f.map(x => x * -1);
+  restricoes = r.map(x => x.map(y => y * -1));
+  limites = l.map(x => x * -1);
+  funcaoObjetiva = f;
   trocas = [[...restricoes.map((v, i) => `x${i + variaveis.length + 1}`)]];
 
   qtdVariaveis = variaveis.length;
@@ -130,12 +120,13 @@ export function rodar(v, r, l, f) {
   return new Promise((resolve, reject) => {
     steps.push([...restricoes]);
 
-    // Condição de Parada: Todos valores da linha funcaoObjetivo positivo
-    while (funcaoObjetiva.some(valor => valor < 0)) {
+    // Condição de Parada: Todos valores da coluna Rs positivo
+    while (limites.slice(0, limites.length - 1).some(valor => valor < 0)) {
       selecionarPivo();
       aplicarGauss();
       atualizaVariaveis();
       steps.push([...restricoes]);
+      console.log(trocas);
     }
     resolve([steps, trocas]);
   });
